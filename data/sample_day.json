@@ -1,0 +1,53 @@
+{
+  "pets": [
+    {"name": "Milo", "species": "cat", "age": 4},
+    {"name": "Luna", "species": "dog", "age": 6}
+  ],
+  "availability": {
+    "start_hour": 8,
+    "end_hour": 13
+  },
+  "tasks": [
+    {
+      "name": "Morning medicine",
+      "pet_name": "Milo",
+      "duration_minutes": 10,
+      "priority": "medium",
+      "due_hour": 9,
+      "category": "medication",
+      "notes": "Give with food."
+    },
+    {
+      "name": "Breakfast",
+      "pet_name": "Milo",
+      "duration_minutes": 15,
+      "priority": "high",
+      "due_hour": 10,
+      "category": "feeding"
+    },
+    {
+      "name": "Morning walk",
+      "pet_name": "Luna",
+      "duration_minutes": 30,
+      "priority": "high",
+      "due_hour": 11,
+      "category": "walk"
+    },
+    {
+      "name": "Clean litter box",
+      "pet_name": "Milo",
+      "duration_minutes": 20,
+      "priority": "medium",
+      "due_hour": 13,
+      "category": "cleaning"
+    },
+    {
+      "name": "Play session",
+      "pet_name": "Luna",
+      "duration_minutes": 25,
+      "priority": "low",
+      "due_hour": 18,
+      "category": "play"
+    }
+  ]
+}

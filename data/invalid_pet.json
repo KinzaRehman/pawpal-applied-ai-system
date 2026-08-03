@@ -1,0 +1,19 @@
+{
+  "pets": [
+    {"name": "Milo", "species": "cat", "age": 4}
+  ],
+  "availability": {
+    "start_hour": 8,
+    "end_hour": 12
+  },
+  "tasks": [
+    {
+      "name": "Walk",
+      "pet_name": "Luna",
+      "duration_minutes": 20,
+      "priority": "high",
+      "due_hour": 10,
+      "category": "walk"
+    }
+  ]
+}

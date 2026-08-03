@@ -1,0 +1,20 @@
+flowchart TD
+    A[User or JSON Scenario] --> B[Input Loader]
+    B --> C[Validation Guardrails]
+    C -->|Invalid| D[Blocked Result + Human-readable Error]
+    C -->|Valid| E[PawPal Planning Agent]
+    E --> F[Specialize Priorities]
+    F --> G[Rank Tasks]
+    G --> H[Construct Schedule]
+    H --> I[Self-Critique]
+    I --> J{Revision Needed?}
+    J -->|Yes| K[Revise Safety Ordering]
+    J -->|No| L[Keep Draft]
+    K --> M[Confidence Scoring]
+    L --> M
+    M --> N[Schedule + Warnings + Unscheduled Tasks]
+    N --> O[Human Review]
+    N --> P[Saved Agent Trace]
+    Q[Evaluation Harness / Pytest] --> C
+    Q --> E
+    Q --> M
