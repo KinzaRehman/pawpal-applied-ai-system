@@ -1,239 +1,671 @@
-# PawPal AI — Reliable Pet-Care Scheduling Agent
+# 🐾 PawPal AI – Intelligent Pet Care Planning Assistant
 
-PawPal AI extends my **CodePath Module 2 PawPal+ project** into an end-to-end
-applied AI system. The original project used object-oriented classes such as
-`Owner`, `Pet`, `Task`, and `Scheduler` to organize pet-care responsibilities
-by priority and time. This version adds a specialized multi-step planning agent,
-input guardrails, self-critique, automatic revision, confidence scoring,
-decision logs, tests, and an evaluation harness.
+**Author:** Kinza Rehman  
+**Course:** CodePath AI Engineering – Applied AI System (Project 4)
 
-## Why this project matters
+---
 
-Pet-care scheduling is not only a sorting problem. A schedule can appear neat
-while putting a low-priority medication after a less safety-sensitive task.
-PawPal AI makes its planning process inspectable and flags situations that
-require human review.
+# Project Overview
 
-## Features
+PawPal AI extends my **CodePath Module 2 PawPal+** project into a complete Applied AI system.
 
-- Agentic workflow: plan → analyze → act → test → critique → revise → reflect
-- PawPal-specific behavior that elevates medication priority
-- Input validation and duplicate-task warnings
-- Capacity and due-time checks
-- Human-readable confidence score
-- Persistent agent traces in `logs/`
-- Automated `pytest` tests
-- Multi-case evaluation script with pass/fail summary
-- Mermaid architecture source file
+The original PawPal+ project was an object-oriented pet scheduling application that allowed users to organize pet-care tasks using classes such as **Owner**, **Pet**, **Task**, and **Scheduler**. It supported priority-based scheduling, recurring tasks, and conflict management.
 
-## Project structure
+For Project 4, I transformed PawPal into an intelligent AI planning assistant by adding Retrieval-Augmented Generation (RAG), a multi-step planning agent, reliability guardrails, confidence scoring, automated evaluation, and decision trace logging.
+
+Instead of simply sorting tasks, PawPal AI now reasons through the scheduling process, retrieves pet-care guidance from an external knowledge base, validates inputs, critiques its own schedule, and returns a confidence score alongside every recommendation.
+
+---
+
+# Original Project
+
+### Base Project
+
+**PawPal+ (CodePath Module 2)**
+
+### Original Goal
+
+The original PawPal+ project was designed to help pet owners organize daily pet-care responsibilities.
+
+The application used object-oriented programming concepts to represent:
+
+- Owners
+- Pets
+- Tasks
+- Scheduler
+
+Users could create tasks, assign priorities, estimate task duration, and generate a schedule.
+
+While useful, the original scheduler relied entirely on deterministic scheduling rules.
+
+---
+
+# Applied AI Enhancements
+
+This project transforms PawPal into an AI-assisted scheduling system by adding four major capabilities.
+
+## 1. Retrieval-Augmented Generation (RAG)
+
+Instead of relying only on hard-coded scheduling rules, PawPal retrieves relevant information from a local knowledge base before creating the schedule.
+
+Current knowledge sources include:
+
+```
+knowledge/
+│
+├── cat_care.md
+└── dog_care.md
+```
+
+The retriever
+
+- identifies pet species
+- determines task categories
+- searches the appropriate knowledge document
+- retrieves relevant care guidance
+- provides that guidance to the planning agent
+
+The retrieved information becomes part of the final recommendation rather than being displayed separately.
+
+---
+
+## 2. Agentic Planning Workflow
+
+Rather than performing one scheduling step, PawPal completes multiple planning stages.
+
+```
+PLAN
+↓
+Validate Inputs
+↓
+Retrieve Pet Knowledge
+↓
+Analyze Tasks
+↓
+Apply PawPal Rules
+↓
+Rank Tasks
+↓
+Construct Draft Schedule
+↓
+Self Critique
+↓
+Revise Schedule
+↓
+Confidence Score
+↓
+Final Recommendation
+```
+
+Each stage performs a different responsibility.
+
+This makes the scheduling process easier to inspect, debug, and evaluate.
+
+---
+
+## 3. Reliability Features
+
+The project includes multiple reliability mechanisms.
+
+### Guardrails
+
+- Invalid pets are rejected.
+- Invalid priorities are blocked.
+- Invalid durations are rejected.
+- Invalid scheduling windows are rejected.
+- Duplicate tasks generate warnings.
+
+### Self Critique
+
+After constructing the schedule, the planner verifies:
+
+- medication ordering
+- scheduling conflicts
+- due times
+- capacity overflow
+- warning generation
+
+If necessary, the planner revises the schedule before returning it.
+
+### Confidence Scoring
+
+Each recommendation includes a confidence score based on:
+
+- percentage of scheduled tasks
+- number of warnings
+- number of unscheduled tasks
+
+Confidence is not intended to represent medical certainty. It reflects scheduling quality.
+
+---
+
+# Key Features
+
+- ✅ Retrieval-Augmented Generation (RAG)
+- ✅ Agentic multi-step planning
+- ✅ Custom pet-care knowledge base
+- ✅ Medication prioritization
+- ✅ Self-critique and schedule revision
+- ✅ Confidence scoring
+- ✅ Input validation guardrails
+- ✅ Automated evaluation harness
+- ✅ Unit testing with pytest
+- ✅ Mermaid architecture diagram
+- ✅ Decision trace logging
+
+---
+
+# Project Structure
 
 ```text
 pawpal-applied-ai-system/
+
 ├── main.py
 ├── evaluate.py
-├── requirements.txt
 ├── README.md
 ├── model_card.md
 ├── ai_interactions.md
+├── requirements.txt
+
+├── knowledge/
+│   ├── cat_care.md
+│   └── dog_care.md
+
 ├── pawpal_ai/
 │   ├── agent.py
+│   ├── retriever.py
 │   ├── guardrails.py
 │   ├── io_utils.py
 │   └── models.py
+
 ├── data/
 │   ├── sample_day.json
 │   ├── invalid_pet.json
 │   └── overloaded_day.json
+
 ├── diagrams/
 │   └── architecture.mmd
-├── logs/
-└── tests/
-    └── test_agent.py
+
+├── tests/
+│   └── test_agent.py
+
+└── logs/
 ```
 
-## Architecture
+---
 
-The Mermaid source is stored at `diagrams/architecture.mmd`.
+# System Architecture
 
-The system loads a JSON scenario, validates it, specializes and ranks tasks,
-constructs a draft schedule, critiques the draft, revises unsafe ordering,
-calculates confidence, and returns a schedule with warnings. A human reviews the
-result. The test harness exercises the same validation, planning, and scoring
-components.
+The Mermaid architecture diagram is located in:
 
-## Setup
+```
+diagrams/architecture.mmd
+```
 
-### Windows PowerShell
+The system processes information using the following workflow.
+
+```
+User Input
+      │
+      ▼
+Input Validation
+      │
+      ▼
+Knowledge Retrieval (RAG)
+      │
+      ▼
+Planning Agent
+      │
+      ▼
+Self Critique
+      │
+      ▼
+Schedule Revision
+      │
+      ▼
+Confidence Scoring
+      │
+      ▼
+Final Schedule
+```
+
+The evaluation harness and unit tests exercise the same planning pipeline to verify reliability.
+
+---
+
+# Installation
+
+## Clone the repository
 
 ```powershell
-git clone YOUR_NEW_REPOSITORY_URL
+git clone https://github.com/KinzaRehman/pawpal-applied-ai-system.git
+
 cd pawpal-applied-ai-system
+```
 
-py -m venv .venv
-.venv\Scripts\Activate.ps1
+## Create a virtual environment
 
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+```powershell
+python -m venv .venv
+```
+
+## Activate the environment
+
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
 If PowerShell blocks activation:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.venv\Scripts\Activate.ps1
 ```
 
-## Run the end-to-end system
+Then activate again.
+
+## Install requirements
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+---
+
+# Running PawPal AI
+
+Run the main scheduling system:
+
+```powershell
+python main.py --input data/sample_day.json
+```
+---
+
+# Example 1 – Successful Schedule
+
+Run:
 
 ```powershell
 python main.py --input data/sample_day.json
 ```
 
-### Example 1 — valid day
+Example Output
 
 ```text
 ============================================================
 PAWPAL AI SCHEDULE
 ============================================================
+
 Status: SUCCESS
+
 Confidence: 0.91
 
-Recommended schedule:
-- 8:00 AM–8:10 AM: Morning medicine for Milo [high/medication]
-- 8:20 AM–8:35 AM: Breakfast for Milo [high/feeding]
-- 8:45 AM–9:15 AM: Morning walk for Luna [high/walk]
-- 9:25 AM–9:45 AM: Clean litter box for Milo [medium/cleaning]
-- 9:55 AM–10:20 AM: Play session for Luna [low/play]
+Recommended Schedule
 
-Decision trace:
-- PLAN: Validate inputs, specialize task priorities, rank tasks, construct a schedule, critique it, and revise if needed.
-- ANALYZE: Accepted 2 pet(s) and 5 task(s).
-- SPECIALIZE: Elevated medication task 'Morning medicine' from medium to high.
-- ACT: Ranked tasks by safety category, priority, due time, and duration.
-- TEST: Checked capacity, due times, and medication placement.
-- CRITIQUE: Medication safety ordering passed.
-- REVISE: No revision was necessary.
-- REFLECT: Final status=success; confidence=0.91; scheduled=5/5.
+8:00 AM – 8:10 AM
+Morning Medicine (Milo)
+
+8:20 AM – 8:35 AM
+Breakfast (Milo)
+
+8:45 AM – 9:15 AM
+Morning Walk (Luna)
+
+9:25 AM – 9:45 AM
+Clean Litter Box (Milo)
+
+9:55 AM – 10:20 AM
+Play Session (Luna)
+
+Decision Trace
+
+PLAN
+ANALYZE
+RETRIEVE
+SPECIALIZE
+ACT
+TEST
+CRITIQUE
+REVISE
+REFLECT
 ```
 
-### Example 2 — invalid pet reference guardrail
+---
+
+# Example 2 – Guardrail
+
+Run
 
 ```powershell
 python main.py --input data/invalid_pet.json
 ```
 
+Output
+
 ```text
-============================================================
-PAWPAL AI SCHEDULE
-============================================================
 Status: BLOCKED
+
 Confidence: 0.00
 
-No tasks were scheduled.
+Task "Walk"
+references unknown pet "Luna".
 
-Human-review warnings:
-- Task 'Walk' references unknown pet 'Luna'.
-
-Decision trace:
-- PLAN: Validate inputs, specialize task priorities, rank tasks, construct a schedule, critique it, and revise if needed.
-- GUARDRAIL: Blocked invalid input — Task 'Walk' references unknown pet 'Luna'.
+Schedule generation stopped.
 ```
 
-### Example 3 — overloaded day
+This demonstrates that invalid input is safely rejected before planning begins.
+
+---
+
+# Example 3 – Capacity Overflow
+
+Run
 
 ```powershell
 python main.py --input data/overloaded_day.json
 ```
 
+Output
+
 ```text
-============================================================
-PAWPAL AI SCHEDULE
-============================================================
 Status: PARTIAL
+
 Confidence: 0.75
 
-Recommended schedule:
-- 8:00 AM–8:30 AM: Medicine for Milo [high/medication]
+Scheduled
 
-Unscheduled tasks:
-- Deep grooming
-- Play session
+Medicine
+
+Unscheduled
+
+Deep Grooming
+
+Play Session
 ```
 
-The system does not silently discard overflow. It returns a partial status,
-lists the unscheduled tasks, and lowers confidence.
+Instead of silently removing tasks, PawPal reports every unscheduled task so the owner can decide how to proceed.
 
-## Run the reliability evaluation
+---
+
+# Retrieval-Augmented Generation (RAG)
+
+The planning agent retrieves pet-care guidance before constructing a schedule.
+
+Knowledge Base
+
+```
+knowledge/
+
+cat_care.md
+
+dog_care.md
+```
+
+## Before Retrieval
+
+```
+Morning Medicine
+
+Reason
+
+Medication task.
+```
+
+## After Retrieval
+
+```
+Morning Medicine
+
+Reason
+
+Medication task.
+
+Retrieved guidance
+
+Medication instructions from a veterinarian always take priority.
+
+Medication tasks should be completed before lower-priority activities.
+```
+
+Because retrieval occurs before planning, recommendations contain information from external documents instead of relying only on hard-coded priorities.
+
+The planning trace records retrieval:
+
+```text
+RETRIEVE
+
+Loaded relevant guidance sections for cat and dog.
+```
+
+---
+
+# Evaluation
+
+Run
 
 ```powershell
 python evaluate.py
 ```
 
+Example Output
+
 ```text
 PawPal AI Evaluation Harness
-============================================================
-[PASS] Medication specialization
-[PASS] Unknown pet guardrail
-[PASS] Capacity handling
-[PASS] Duplicate warning
-------------------------------------------------------------
-Summary: 4/4 tests passed (100%)
+
+PASS
+Medication prioritization
+
+PASS
+Unknown pet guardrail
+
+PASS
+Capacity handling
+
+PASS
+Duplicate warning
+
+Summary
+
+4 / 4 tests passed
 ```
 
-## Run unit tests
+---
+
+# Unit Testing
+
+Run
 
 ```powershell
-pytest -q
+python -m pytest -q
 ```
+
+Output
 
 ```text
 3 passed
 ```
 
-## Reliability and guardrail behavior
+---
 
-| Test input | Expected behavior | Result |
-|---|---|---|
-| Medication marked medium | Elevate it to high and schedule it first | Pass |
-| Task references unknown pet | Block schedule safely | Pass |
-| Tasks exceed availability | Return partial result and list overflow | Pass |
-| Duplicate task | Warn the user | Pass |
+# Reliability Summary
 
-The evaluation harness reports **4/4 passing cases**. The unit-test suite reports
-**3 passing tests**. Confidence decreases when tasks are unscheduled or warnings
-are present.
+| Test | Expected Result | Outcome |
+|------|-----------------|---------|
+| Medication priority | Elevated to High | ✅ Pass |
+| Unknown pet | Block schedule | ✅ Pass |
+| Overflow schedule | Partial schedule returned | ✅ Pass |
+| Duplicate task | Warning generated | ✅ Pass |
 
-## Design decisions and trade-offs
+The evaluation harness demonstrates consistent behavior across multiple predefined scenarios.
 
-I used a local deterministic planning agent instead of requiring a generative
-model API. This makes the project reproducible, free to run, transparent, and
-easy for a grader to test. The trade-off is that it cannot interpret unrestricted
-natural language or understand medical nuance.
+---
 
-The trace records high-level system decisions rather than hidden chain-of-thought.
-This provides useful audit evidence without pretending that internal reasoning is
-always correct.
+# Design Decisions
 
-## Stretch features completed
+Several design choices were intentionally made while extending PawPal.
 
-- **Agentic Workflow Enhancement (+2):** Multi-step planning and critique with
-  saved traces in `logs/agent_trace.md` and documentation in `ai_interactions.md`.
-- **Fine-Tuning or Specialization Behavior (+2):** PawPal-specific constrained
-  rules and a baseline comparison in `model_card.md`.
-- **Test Harness or Evaluation Script (+2):** `evaluate.py` runs four predefined
-  scenarios and prints a pass/fail summary.
+### Local AI instead of Cloud APIs
 
-## Testing summary
+The planning agent runs entirely on the local machine.
 
-The system performs consistently on valid, invalid, duplicate, and capacity-
-limited scenarios. It struggles with real-world details that are not represented
-in the input, such as travel time, veterinarian instructions, medication
-intervals, and changing household availability.
+Advantages
 
-## What this project says about me as an AI engineer
+- No API keys
+- No internet connection required
+- Fully reproducible
+- Deterministic outputs
+- Easy for graders to run
 
-This project shows that I approach AI as a system-design and reliability problem,
-not only as a prompt. I built a transparent workflow that validates inputs,
-makes decisions, checks its work, communicates uncertainty, and keeps a human in
-the loop.
+Tradeoff
+
+The system cannot understand unrestricted natural language like a large language model.
+
+---
+
+### Why Retrieval Instead of Hard Coding?
+
+Instead of embedding all pet-care rules directly into Python, the system retrieves guidance from Markdown knowledge files.
+
+Benefits
+
+- Easier to expand
+- Easier to update
+- Demonstrates Retrieval-Augmented Generation
+- Better separation of knowledge and planning
+
+---
+
+### Human in the Loop
+
+PawPal AI is designed as a decision-support tool.
+
+It never replaces veterinarian advice.
+
+Medication tasks remain visible for human review.
+
+Warnings are never hidden.
+
+Confidence scores communicate scheduling quality rather than certainty.
+
+---
+
+# Stretch Features Completed
+
+## ✅ RAG Enhancement (+2)
+
+- Custom Markdown knowledge base
+- Species-specific retrieval
+- Retrieved guidance integrated into schedule explanations
+- Before/after comparison documented
+
+---
+
+## ✅ Agentic Workflow (+2)
+
+The planner performs multiple reasoning stages.
+
+```
+PLAN
+
+↓
+
+RETRIEVE
+
+↓
+
+ANALYZE
+
+↓
+
+ACT
+
+↓
+
+TEST
+
+↓
+
+CRITIQUE
+
+↓
+
+REVISE
+
+↓
+
+REFLECT
+```
+
+Each run is recorded inside
+
+```
+logs/agent_trace.md
+```
+
+---
+
+## ✅ Specialized Behavior (+2)
+
+The scheduler contains PawPal-specific scheduling rules.
+
+Examples
+
+- Medication automatically elevated to High Priority.
+- Safety-related tasks ranked ahead of optional enrichment.
+- Species-specific care guidance retrieved before scheduling.
+
+---
+
+## ✅ Evaluation Harness (+2)
+
+The project contains
+
+```
+evaluate.py
+```
+
+which automatically evaluates multiple predefined scenarios and reports pass/fail results.
+
+---
+
+# What I Learned
+
+Coming from a data analytics background rather than a traditional software engineering background, this project helped me understand that AI systems involve much more than prompting a language model.
+
+Reliable AI systems require:
+
+- validation
+- retrieval
+- planning
+- evaluation
+- testing
+- transparency
+- human oversight
+
+Designing PawPal AI taught me how these components work together to create an AI assistant that is more reliable, explainable, and reproducible.
+
+---
+
+# Future Improvements
+
+Potential future enhancements include
+
+- veterinarian-approved knowledge sources
+- recurring medication schedules
+- calendar integration
+- Streamlit web application
+- mobile interface
+- multiple pet owners
+- appointment synchronization
+- cloud database
+- larger retrieval knowledge base
+- natural language task creation
+
+---
+
+# Portfolio Statement
+
+This project demonstrates my ability to design an end-to-end Applied AI system rather than simply integrating a language model.
+
+It combines object-oriented programming, retrieval, planning, reliability engineering, automated testing, documentation, and human-centered AI design into a single reproducible application.
+
+The project reflects how I approach AI engineering: building transparent systems that can be tested, evaluated, and improved while keeping humans involved in important decisions.
